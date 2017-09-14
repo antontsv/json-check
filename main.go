@@ -15,9 +15,18 @@ func main() {
 	data, err := ioutil.ReadFile(file)
 	errCheck(err)
 
-	var js map[string]interface{}
-	err = json.Unmarshal(data, &js)
-	errCheck(err)
+	if len(data) < 0 || data[0] != '{' {
+		errCheck(fmt.Errorf("expected beginning of JSON object at position 0"))
+	}
+
+	// Just use validation part, not hydrate any data structure
+	err = json.Unmarshal(data, nil)
+	e, ok := err.(*json.SyntaxError)
+	if ok {
+		err = fmt.Errorf("syntax error near position %d: %s", e.Offset, e.Error())
+		errCheck(err)
+	}
+
 }
 
 func fatalErr(msg string) {
