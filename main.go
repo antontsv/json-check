@@ -15,8 +15,8 @@ func main() {
 	data, err := ioutil.ReadFile(file)
 	errCheck(err)
 
-	if len(data) < 0 || data[0] != '{' {
-		errCheck(fmt.Errorf("expected beginning of JSON object at position 0"))
+	if len(data) < 0 || (data[0] != '{' && data[0] != '[') {
+		errCheck(fmt.Errorf("expected beginning of JSON object or array at position 0"))
 	}
 
 	// Just use validation part, not hydrate any data structure
